@@ -32,6 +32,7 @@ jobs:
     outputs:
       output_dev_deployment: ${{ steps.dev_deployment.outputs.deployment }}
       output_release_deployment: ${{ steps.release_deployment.outputs.deployment }}
+      output_environment: ${{ steps.environment.outputs.env }}
     steps:
       - id: dev_deployment
         if: github.event.pull_request.merged == true
@@ -39,15 +40,19 @@ jobs:
       - id: release_deployment
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment != ''
         run: echo "deployment=${{ inputs.environment }}" >> "$GITHUB_OUTPUT"
-      - name: log
+      - name: environment
         run: |
           echo ${{ steps.dev_deployment.outputs.deployment }}
           echo ${{ steps.release_deployment.outputs.deployment }}
+          if [ "${{ steps.dev_deployment.outputs.deployment }}" == "dev" ]; then
+            echo "env=dev" >> "$GITHUB_OUTPUT"
+          elif [ "${{ steps.release_deployment.outputs.deployment }}" != "" ]; then
+            echo "env=${{ steps.release_deployment.outputs.deployment }}" >> "$GITHUB_OUTPUT"
   call-deployment:
     needs: 
       - call-unit-test
       - set-environment
-    if: needs.set-environment.outputs.output_dev_deployment == 'dev' || needs.set-environment.outputs.output_release_deployment == 'qas' || needs.set-environment.outputs.output_release_deployment == 'prd'
+    if: needs.set-environment.outputs.output_environment == 'dev' || needs.set-environment.outputs.output_environment == 'qas' || needs.set-environment.outputs.output_environment == 'prd'
     uses: ./.github/workflows/python-app-deployment.yml
     with:
       environment: ${{ inputs.environment }}
