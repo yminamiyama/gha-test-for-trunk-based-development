@@ -17,7 +17,10 @@ on:
         
   pull_request:
     branches: [ "main" ]
-    types: ["opened", "synchronize", "closed"]
+    types: ["opened", "synchronize"]
+
+  push:
+    branches: [ "main" ]
 
 permissions:
   contents: read
