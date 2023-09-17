@@ -39,11 +39,15 @@ jobs:
       - id: release_deployment
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment != ''
         run: echo "deployment=${{ inputs.environment }}" >> "$GITHUB_OUTPUT"
+      - name: log
+        run: |
+          echo ${{ steps.dev_deployment.outputs.deployment }}
+          echo ${{ steps.release_deployment.outputs.deployment }}
   call-deployment:
     needs: 
       - call-unit-test
       - set-environment
-    if: ${{needs.set-environment.outputs.output_dev_deployment}} == 'dev' || {{needs.set-environment.outputs.output_release_deployment}} == 'qas' || {{needs.check-environment.outputs.output_release_deployment}} == 'prd'
+    if: ${{needs.set-environment.outputs.output_dev_deployment}} == 'dev' || {{needs.set-environment.outputs.output_release_deployment}} == 'qas' || {{needs.set-environment.outputs.output_release_deployment}} == 'prd'
     uses: ./.github/workflows/python-app-deployment.yml
     with:
       environment: ${{ inputs.environment }}
