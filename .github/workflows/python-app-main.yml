@@ -27,6 +27,7 @@ jobs:
     uses: ./.github/workflows/python-app-unittest.yml
   call-deployment:
     needs: call-unit-test
+    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/python-app-deployment.yml
     with:
       environment: dev
