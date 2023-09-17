@@ -25,21 +25,25 @@ permissions:
 jobs:
   call-unit-test:
     uses: ./.github/workflows/python-app-unittest.yml
-  check-deployment:
+  set-environment:
     runs-on: ubuntu-latest
     needs:
       - call-unit-test
-    if: github.event.pull_request.merged == true
     outputs:
-      output_dev_deployment: ${{ steps.dev_deployment.outputs.dev }}
+      output_dev_deployment: ${{ steps.dev_deployment.outputs.deployment }}
+      output_release_deployment: ${{ steps.release_deployment.outputs.deployment }}
     steps:
       - id: dev_deployment
-        run: echo "dev=yes" >> "$GITHUB_OUTPUT"
+        if: github.event.pull_request.merged == true
+        run: echo "deployment=dev" >> "$GITHUB_OUTPUT"
+      - id: release_deployment
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment != ''
+        run: echo "deployment=${{ inputs.environment }}" >> "$GITHUB_OUTPUT"
   call-deployment:
     needs: 
       - call-unit-test
-      - check-deployment
-    if: ${{needs.check-deployment.outputs.output_dev_deployment}} == 'yes' || github.event_name == 'workflow_dispatch' && github.event.inputs.environment != ''
+      - set-environment
+    if: ${{needs.check-deployment.outputs.output_dev_deployment}} == 'dev' || {{needs.check-deployment.outputs.output_release_deployment}} == 'qas' || {{needs.check-deployment.outputs.output_dev_deployment}} == 'prd'
     uses: ./.github/workflows/python-app-deployment.yml
     with:
       environment: ${{ inputs.environment }}
