@@ -43,7 +43,7 @@ jobs:
     needs: 
       - call-unit-test
       - set-environment
-    if: ${{needs.check-deployment.outputs.output_dev_deployment}} == 'dev' || {{needs.check-deployment.outputs.output_release_deployment}} == 'qas' || {{needs.check-deployment.outputs.output_dev_deployment}} == 'prd'
+    if: ${{needs.set-environment.outputs.output_dev_deployment}} == 'dev' || {{needs.set-environment.outputs.output_release_deployment}} == 'qas' || {{needs.check-environment.outputs.output_release_deployment}} == 'prd'
     uses: ./.github/workflows/python-app-deployment.yml
     with:
       environment: ${{ inputs.environment }}
