@@ -61,5 +61,5 @@ jobs:
     if: needs.set-environment.outputs.output_environment == 'dev' || needs.set-environment.outputs.output_environment == 'qas' || needs.set-environment.outputs.output_environment == 'prd'
     uses: ./.github/workflows/python-app-deployment.yml
     with:
-      environment: ${{ inputs.environment }}
+      environment: ${{ needs.set-environment.outputs.output_environment }}
     secrets: inherit
