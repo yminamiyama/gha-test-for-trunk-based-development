@@ -50,6 +50,7 @@ jobs:
             echo "env=${{ steps.release_deployment.outputs.deployment }}" >> "$GITHUB_OUTPUT"
           fi
       - name: log
+        run: |
           echo ${{ steps.dev_deployment.outputs.deployment }}
           echo ${{ steps.release_deployment.outputs.deployment }}
           echo ${{ steps.environment.outputs.env }}
