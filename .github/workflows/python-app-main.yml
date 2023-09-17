@@ -48,6 +48,7 @@ jobs:
             echo "env=dev" >> "$GITHUB_OUTPUT"
           elif [ "${{ steps.release_deployment.outputs.deployment }}" != "" ]; then
             echo "env=${{ steps.release_deployment.outputs.deployment }}" >> "$GITHUB_OUTPUT"
+          fi
   call-deployment:
     needs: 
       - call-unit-test
