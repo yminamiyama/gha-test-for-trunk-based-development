@@ -7,13 +7,13 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-      required: true
-      default: 'dev'
-      type: choice
-      options:
-        - dev
-        - qas
-        - prd
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - qas
+          - prd
         
   pull_request:
     branches: [ "main" ]
