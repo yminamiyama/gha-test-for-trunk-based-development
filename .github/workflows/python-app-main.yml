@@ -44,10 +44,10 @@ jobs:
           echo ${{ steps.dev_deployment.outputs.deployment }}
           echo ${{ steps.release_deployment.outputs.deployment }}
   call-deployment:
+    if: ${{needs.set-environment.outputs.output_dev_deployment}} == 'dev' || {{needs.set-environment.outputs.output_release_deployment}} == 'qas' || {{needs.set-environment.outputs.output_release_deployment}} == 'prd'
     needs: 
       - call-unit-test
       - set-environment
-    if: ${{needs.set-environment.outputs.output_dev_deployment}} == 'dev' || {{needs.set-environment.outputs.output_release_deployment}} == 'qas' || {{needs.set-environment.outputs.output_release_deployment}} == 'prd'
     uses: ./.github/workflows/python-app-deployment.yml
     with:
       environment: ${{ inputs.environment }}
