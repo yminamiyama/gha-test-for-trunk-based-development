@@ -3,18 +3,7 @@
 
 name: Python application Deployment
 
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-          - dev
-          - qas
-          - prd
-          
+on:          
   workflow_call:
     secrets:
       TEST_ROLE:
@@ -37,3 +26,4 @@ jobs:
       - name: Test with pytest
         run: |
           echo "Execute a deployment."
+          echo ${{ inputs.environment }}
