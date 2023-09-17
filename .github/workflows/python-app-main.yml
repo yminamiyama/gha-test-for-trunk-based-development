@@ -40,7 +40,7 @@ jobs:
       - id: release_deployment
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment != ''
         run: echo "deployment=${{ inputs.environment }}" >> "$GITHUB_OUTPUT"
-      - name: environment
+      - id: environment
         run: |
           echo ${{ steps.dev_deployment.outputs.deployment }}
           echo ${{ steps.release_deployment.outputs.deployment }}
@@ -49,6 +49,10 @@ jobs:
           elif [ "${{ steps.release_deployment.outputs.deployment }}" != "" ]; then
             echo "env=${{ steps.release_deployment.outputs.deployment }}" >> "$GITHUB_OUTPUT"
           fi
+      - name: log
+          echo ${{ steps.dev_deployment.outputs.deployment }}
+          echo ${{ steps.release_deployment.outputs.deployment }}
+          echo ${{ steps.environment.outputs.env }}
   call-deployment:
     needs: 
       - call-unit-test
