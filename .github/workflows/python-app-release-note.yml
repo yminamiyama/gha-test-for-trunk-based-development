@@ -55,13 +55,14 @@ jobs:
 
             if ${{ github.event.inputs.major_release }}; then
               echo 'major release'
-              ((VERSION_NUMBERS[0]++))
-              VERSION[1]=0
-              VERSION[2]=0
+              ((VERSION_NUMBERS[0]+=1))
+              VERSION_NUMBERS[1]=0
+              VERSION_NUMBERS[2]=0
               echo $VERSION_NUMBERS
             else
               echo 'minor release'
-              ((VERSION_NUMBERS[1]++))
+              ((VERSION_NUMBERS[1]+=1))
+              VERSION_NUMBERS[2]=0
               echo $VERSION_NUMBERS
             fi
 
