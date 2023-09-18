@@ -2,6 +2,17 @@ name: Python application Create release note
 
 on:
   workflow_dispatch:
+    inputs:
+      major_release:
+        description: meajor release(optional)
+        type: boolean
+        default: false
+        required: false
+
+      release_version:
+        description: Specify release version(optional)=major_release will be ignored
+        type: string
+        required: false
 
 permissions:
   contents: read
