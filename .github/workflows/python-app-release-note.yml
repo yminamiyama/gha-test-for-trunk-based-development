@@ -33,11 +33,11 @@ jobs:
       id: set_release_tag
       run: |
         echo "${{ steps.cur_tag_var.outputs.cur_tag }}"
-
+        TAG_NAME=${{ steps.cur_tag_var.outputs.cur_tag }}
+        echo $TAG_NAME
         if [[ "${{ github.event.inputs.release_version }}" != '' ]]; then
           echo 'Release Version is specified.'
-          echo "TAG_NAME=${{ github.event.inputs.release_version }}" >> $GITHUB_ENV
-          echo "$TAG_NAME"
+          TAG_NAME=${{ github.event.inputs.release_version }}
         else
           if [[ "${{ steps.cur_tag_var.outputs.cur_tag }}" =~ ^[0-9].+$ ]]; then
             echo 'The version is valid.'
@@ -53,13 +53,15 @@ jobs:
               ((VERSION[-1]+=1))
             fi
 
-            echo $NEW_VERSION
             NEW_VERSION=$(IFS="."; echo "${VERSION[*]}")
-            echo "TAG_NAME=$NEW_VERSION" >> $GITHUB_ENV 
+            echo $NEW_VERSION
+            TAG_NAME=$NEW_VERSION
+            echo $TAG_NAME
           else
             if [[ "${{ github.event.inputs.release_version }}" != '' ]]; then
               echo 'Cannout update the version so use just specified release version.'
-              echo "TAG_NAME=${{ github.event.inputs.release_version }}" >> $GITHUB_ENV
+              TAG_NAME=${{ github.event.inputs.release_version }}
+              echo $TAG_NAME
             else
               echo 'Release tag is invalid'
               exit 1
@@ -67,7 +69,7 @@ jobs:
           fi
         fi
         echo "TAG:"
-        echo "$TAG_NAME" 
+        echo $TAG_NAME
         echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
         
     - name: Push release tag
