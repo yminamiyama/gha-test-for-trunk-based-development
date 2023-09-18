@@ -39,9 +39,13 @@ jobs:
         echo $TAG_NAME
         if [[ "${{ github.event.inputs.release_version }}" != '' ]]; then
           echo 'Release Version is specified.'
-          TAG_NAME=${{ github.event.inputs.release_version }}
+          if [[ "${{ github.event.inputs.release_version }}" =~ ^v[0-9].+¥.[0-9].+¥.[0-9].+$ ]]; then
+            TAG_NAME=${{ github.event.inputs.release_version }}
+          else
+            echo 'The version is invalid.'
+          fi
         else
-          if [[ "${{ steps.cur_tag_var.outputs.cur_tag }}" =~ ^[0-9].+$ ]]; then
+          if [[ "${{ steps.cur_tag_var.outputs.cur_tag }}" =~ ^v[0-9].+¥.[0-9].+¥.[0-9].+$ ]]; then
             echo 'The version is valid.'
             CUR_VERSION=${{ steps.cur_tag_var.outputs.cur_tag }}
             VERSION=( ${CUR_VERSION//./ } )
