@@ -61,7 +61,7 @@ jobs:
               echo $VERSION_NUMBERS
             else
               echo 'minor release'
-              ((VERSION[1]++))
+              ((VERSION_NUMBERS[1]++))
               echo $VERSION_NUMBERS
             fi
 
