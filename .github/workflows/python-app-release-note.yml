@@ -66,8 +66,8 @@ jobs:
           fi
         fi
         echo "TAG:"
-        echo "$TAG_NAME" 
-        echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+        echo "${{ TAG_NAME }}" 
+        echo "tag_name=${{ TAG_NAME }}" >> $GITHUB_OUTPUT
         
     - name: Push release tag
       id: set_git_tag
