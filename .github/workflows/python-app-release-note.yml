@@ -41,6 +41,7 @@ jobs:
             TAG_NAME=${{ github.event.inputs.release_version }}
           else
             echo 'The version is invalid.'
+            exit 1
           fi
         else
           if [[ "${{ steps.cur_tag_var.outputs.cur_tag }}" =~ ^v[0-9].+¥.[0-9].+¥.[0-9].+$ ]]; then
