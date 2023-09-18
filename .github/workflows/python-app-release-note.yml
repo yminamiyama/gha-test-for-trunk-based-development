@@ -33,11 +33,11 @@ jobs:
             VERSION=( ${CUR_VERSION//./ } )
 
             if ${{ github.event.inputs.major_release }}; then
-              echo 'メジャーバージョン リリース'
+              echo 'major release'
               ((VERSION[-2]+=1))
               VERSION[-1]=0
             else
-              echo 'マイナーバージョン リリース'
+              echo 'minor release'
               ((VERSION[-1]+=1))
             fi
 
@@ -55,7 +55,6 @@ jobs:
           fi
         fi
         echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
-        echo ::set-output name=tag_name::$(cat TAG_NAME)
         
     - name: Push release tag
       id: set_git_tag
