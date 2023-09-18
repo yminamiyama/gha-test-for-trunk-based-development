@@ -65,6 +65,8 @@ jobs:
             fi
           fi
         fi
+        echo "TAG:"
+        echo "$TAG_NAME" 
         echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
         
     - name: Push release tag
