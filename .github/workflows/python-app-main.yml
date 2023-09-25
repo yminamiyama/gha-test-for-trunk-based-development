@@ -17,10 +17,10 @@ on:
         
   pull_request:
     branches: [ "main" ]
-    types: ["opened", "synchronize", "closed"]
+    types: ["opened", "synchronize"]
 
-  # push:
-  #   branches: [ "main" ]
+  push:
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -38,7 +38,7 @@ jobs:
       output_environment: ${{ steps.environment.outputs.env }}
     steps:
       - id: dev_deployment
-        if: github.event.pull_request.merged == true
+        if: github.event_name == 'push'
         run: echo "deployment=dev" >> "$GITHUB_OUTPUT"
       - id: release_deployment
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment != ''
@@ -57,6 +57,7 @@ jobs:
           echo ${{ steps.dev_deployment.outputs.deployment }}
           echo ${{ steps.release_deployment.outputs.deployment }}
           echo ${{ steps.environment.outputs.env }}
+          echo ${{ github.event_name }}
   call-deployment:
     needs: 
       - call-unit-test
